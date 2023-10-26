@@ -15,3 +15,4 @@ export * from './js/twitter.js';
 export * from './js/web.js';
 export * from './js/storage.js';
 export * from './js/pendingRequest.js';
+export * from './js/object.js';
