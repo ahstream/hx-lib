@@ -10,6 +10,10 @@ export function extractTwitterHandle(url) {
   if (!url) {
     return '';
   }
+  if (typeof url !== 'string') {
+    console.error('invaid url:', url);
+    return '';
+  }
 
   const screenName = getSearchParam(url, 'screen_name');
   if (screenName) {

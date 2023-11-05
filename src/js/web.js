@@ -8,7 +8,12 @@ export function getQueryParam(href, key) {
 }
 
 export function getSearchParam(href, key) {
-  return new URL(href).searchParams.get(key);
+  try {
+    return new URL(href).searchParams.get(key);
+  } catch (e) {
+    console.log('xxxx error:', href, key, e);
+    return null;
+  }
 }
 
 export function addQueryParam(url, key, val) {
