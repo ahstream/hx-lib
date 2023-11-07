@@ -16,9 +16,37 @@ export function isValidDate(date) {
   date.getTime() === date.getTime();
 }
 
-export function isToday(someDate) {
+export function isToday(date) {
   const today = new Date();
-  return someDate.getDate() == today.getDate() && someDate.getMonth() == today.getMonth() && someDate.getFullYear() == today.getFullYear();
+  return date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear();
+}
+
+export function isTomorrow(date) {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  // 👇️ Tomorrow's date
+  console.log(tomorrow);
+
+  if (tomorrow.toDateString() === date.toDateString()) {
+    return true;
+  }
+
+  return false;
+}
+
+export function isYesterday(date) {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // 👇️ Yesterday's date
+  //console.log(date);
+
+  if (yesterday.toDateString() === date.toDateString()) {
+    return true;
+  }
+
+  return false;
 }
 
 export function millisecondsAhead(ms, date = null) {

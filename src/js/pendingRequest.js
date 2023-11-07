@@ -8,15 +8,31 @@ export async function addPendingRequest(url, data = {}) {
   await chrome.storage.local.set(obj);
 }
 
-export async function dispatch(url, lifetimeSecs = null) {
+export async function dispatch(url, lifetimeSecs = null, lazyMatchTo = false) {
   // console.log('dispatch url', url, lifetimeSecs);
   const key = normalizePendingLink(url);
+
   const container = await chrome.storage.local.get(key);
-  console.log('container', JSON.stringify(container));
-  console.log('container', container);
+  if (container) {
+    return dispatchContainer(container, key, lifetimeSecs);
+  }
+  let lazyKey = null;
+  if (lazyMatchTo) {
+    const urlObj = new URL(url);
+    urlObj.search = '';
+    urlObj.hash = '';
+    lazyKey = normalizePendingLink(urlObj.toString());
+  }
+  const lazyContainer = lazyKey ? await chrome.storage.local.get(lazyKey) : null;
+  if (lazyContainer) {
+    return dispatchContainer(lazyContainer, lazyKey, lifetimeSecs);
+  }
+  return null;
+}
+
+async function dispatchContainer(container, key, lifetimeSecs) {
   let request = container ? container[key] : null;
   console.log('key, request', key, request);
-  // console.log('dispatch request, container:', request, container);
   if (request) {
     if (lifetimeSecs) {
       const whenDead = new Date(request.created + lifetimeSecs * 1000);

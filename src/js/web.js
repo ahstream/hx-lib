@@ -43,3 +43,8 @@ export function extractURLs(text) {
   const matches = [...text.matchAll(re)];
   return matches.map((x) => x[0]);
 }
+
+export function removeUrlArgs(url) {
+  const u = new URL(url);
+  return u.origin + u.pathname;
+}
