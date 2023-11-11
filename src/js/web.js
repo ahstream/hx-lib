@@ -11,7 +11,7 @@ export function getSearchParam(href, key) {
   try {
     return new URL(href).searchParams.get(key);
   } catch (e) {
-    console.log('xxxx error:', href, key, e);
+    console.error('getSearchParam error; href, key, error:', href, key, e);
     return null;
   }
 }
