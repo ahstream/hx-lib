@@ -24,7 +24,6 @@ export function noDuplicatesByKey(array, key) {
   return removeDuplicatesByKey(array, idKey);
 }
 
-// todo: in DECA-HELPER, replace noDuplicatesByObject() with new noDuplicates()
 function noDuplicatesByObject(arr) {
   const idKey = (item) => JSON.stringify(item);
   return removeDuplicatesByKey(arr, idKey);
