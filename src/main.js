@@ -1,4 +1,5 @@
 export * from './js/array.js';
+export * from './js/console.js';
 export * from './js/crypto.js';
 export * from './js/date.js';
 export * from './js/debug.js';

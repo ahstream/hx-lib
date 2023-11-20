@@ -77,6 +77,7 @@ export function makeTwitterLikeIntentUrl(url) {
   return `https://twitter.com/intent/like?tweet_id=${id}`;
 }
 
+// todo replace usages with isTwitterURL!
 export function isTwitterLink(url) {
   if (!url?.match) {
     return false;

@@ -20,10 +20,12 @@ export function createLogger(logLevel = null) {
   };
 }
 
+/*
 export function createLogLevelArg(url = null) {
   const logLevel = getLogLevel(url);
   return logLevel ? `hxlog=${logLevel}` : '';
 }
+*/
 
 function getLogLevel(url = null) {
   const href = url || location?.href?.toLowerCase();
