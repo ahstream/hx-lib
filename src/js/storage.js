@@ -73,7 +73,7 @@ export async function initStorageWithOptions(defaultOptions = {}, overrideOption
   const storage = await getStorageData();
   storage.options = storage.options || {};
   const finalOptions = { ...defaultOptions, ...storage.options, ...overrideOptions };
-  console.log('storages:', {
+  console.log('Storages:', {
     storage,
     defaultOptions,
     currentOptions: storage.options,
@@ -83,5 +83,5 @@ export async function initStorageWithOptions(defaultOptions = {}, overrideOption
   });
   storage.options = finalOptions;
   await setStorageData({ options: finalOptions, ...customStorage });
-  console.log('storage:', await getStorageData());
+  console.log('Storage:', await getStorageData());
 }

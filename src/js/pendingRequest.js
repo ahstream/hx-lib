@@ -5,16 +5,16 @@ import { sleep } from './promise';
 export async function addPendingRequest(url, data = {}) {
   // console.log('addPendingRequest', url, data);
   const key = normalizePendingLink(url);
+  console.info('Add pending request', url, key, data);
   const obj = {};
   obj[key] = { ...data, created: Number(new Date()), isPendingRequest: true };
   await chrome.storage.local.set(obj);
 }
 
 export async function dispatch(url, lifetimeSecs = null, lazyMatchTo = false) {
-  console.log('dispatch; url, lifetimeSecs, lazyMatchTo:', url, lifetimeSecs, lazyMatchTo);
-
   const key = normalizePendingLink(url);
-  console.log('dispatch; key:', key);
+
+  console.info('Dispatch URL:', url, key, lifetimeSecs, lazyMatchTo);
 
   //console.log('storageAll', await chrome.storage.local.get());
 
@@ -23,11 +23,11 @@ export async function dispatch(url, lifetimeSecs = null, lazyMatchTo = false) {
   await sleep(100);
 
   const container = await chrome.storage.local.get(key);
-  console.log('dispatch; container:', container);
   if (container) {
     result = await dispatchContainer(container, key, lifetimeSecs);
   }
   if (result) {
+    console.info('Dispatch result:', result);
     return result;
   }
 
@@ -39,50 +39,19 @@ export async function dispatch(url, lifetimeSecs = null, lazyMatchTo = false) {
     lazyKey = normalizePendingLink(urlObj.toString());
   }
   const lazyContainer = lazyKey ? await chrome.storage.local.get(lazyKey) : null;
-  console.log('dispatch; lazyContainer, lazyKey:', lazyContainer, lazyKey);
   if (lazyContainer) {
-    return dispatchContainer(lazyContainer, lazyKey, lifetimeSecs);
-  }
-  return null;
-}
-
-export async function dispatchOld(url, lifetimeSecs = null, lazyMatchTo = false) {
-  console.log('dispatch; url, lifetimeSecs, lazyMatchTo:', url, lifetimeSecs, lazyMatchTo);
-
-  const key = normalizePendingLink(url);
-  console.log('dispatch; key:', key);
-
-  //console.log('storageAll', await chrome.storage.local.get());
-
-  let result = null;
-
-  const container = await chrome.storage.local.get(key);
-  console.log('dispatch; container:', container);
-  if (container) {
-    result = await dispatchContainer(container, key, lifetimeSecs);
-  }
-  if (result) {
+    const result = dispatchContainer(lazyContainer, lazyKey, lifetimeSecs);
+    console.info('Dispatch result:', result);
     return result;
   }
 
-  let lazyKey = null;
-  if (lazyMatchTo) {
-    const urlObj = new URL(url);
-    urlObj.search = '';
-    urlObj.hash = '';
-    lazyKey = normalizePendingLink(urlObj.toString());
-  }
-  const lazyContainer = lazyKey ? await chrome.storage.local.get(lazyKey) : null;
-  console.log('dispatch; lazyContainer, lazyKey:', lazyContainer, lazyKey);
-  if (lazyContainer) {
-    return dispatchContainer(lazyContainer, lazyKey, lifetimeSecs);
-  }
+  console.info('Dispatch result:', result);
   return null;
 }
 
 async function dispatchContainer(container, key, lifetimeSecs) {
   let request = container ? container[key] : null;
-  console.log('dispatchContainer; container, key, request:', container, key, request);
+  //console.log('dispatchContainer; container, key, request:', container, key, request);
   if (request) {
     if (lifetimeSecs) {
       const whenDead = new Date(request.created + lifetimeSecs * 1000);
