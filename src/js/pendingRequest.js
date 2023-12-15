@@ -40,7 +40,7 @@ export async function dispatch(url, lifetimeSecs = null, lazyMatchTo = false) {
   }
   const lazyContainer = lazyKey ? await chrome.storage.local.get(lazyKey) : null;
   if (lazyContainer) {
-    const result = dispatchContainer(lazyContainer, lazyKey, lifetimeSecs);
+    const result = await dispatchContainer(lazyContainer, lazyKey, lifetimeSecs);
     console.info('Dispatch result:', result);
     return result;
   }

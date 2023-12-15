@@ -151,6 +151,21 @@ export function addTarget(elem, target) {
   }
 }
 
+export function textOrNumAsClass(val) {
+  switch (typeof val) {
+    case 'string':
+      return textAsClass(val);
+    case 'number':
+      return textAsClass(val);
+    default:
+      return null;
+  }
+}
+
 export function textAsClass(text) {
   return typeof text === 'string' ? text.trim().toLowerCase().replace(' ', '-') : null;
+}
+
+export function numAsClass(num) {
+  return typeof num === 'number' ? 'n' + num.toString() : null;
 }
