@@ -3,12 +3,12 @@
  * FILE DESCRIPTION
  */
 
-export function kFormatter(num, suffix = 'k') {
+export function kFormatter(num, suffix = 'k', lessThanK = '0') {
   if (typeof num !== 'number') {
     return '';
   }
   if (num < 1000) {
-    return `<1` + suffix;
+    return lessThanK + suffix;
   }
   return Math.sign(num) * (Math.abs(num) / 1000).toFixed(0) + suffix;
 }

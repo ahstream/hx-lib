@@ -80,10 +80,11 @@ export async function waitForTextEquals(text, selector, maxWait = 30000, interva
   return waitForTextContent(text, selector, maxWait, interval, { equals: true });
 }
 
-export async function waitForSelector(selector, maxWait, interval) {
+export async function waitForSelector(selector, maxWait, interval, base = null) {
+  const doc = base || document;
   const stopTime = Date.now() + maxWait;
   while (Date.now() <= stopTime) {
-    const elem = document.querySelector(selector);
+    const elem = doc.querySelector(selector);
     if (elem) {
       return elem;
     }
@@ -92,12 +93,12 @@ export async function waitForSelector(selector, maxWait, interval) {
   return null;
 }
 
-export async function waitForEitherSelector(selectors, maxWait, interval) {
+export async function waitForEitherSelector(selectors, maxWait, interval, base = null) {
   const stopTime = Date.now() + maxWait;
   while (Date.now() <= stopTime) {
     for (const selector of selectors) {
       //console.log('selector', selector);
-      const result = await waitForSelector(selector, interval, interval);
+      const result = await waitForSelector(selector, interval, interval, base);
       //console.log('result', result);
       if (result) {
         return result;
