@@ -15,6 +15,7 @@ export * from './js/sort.js';
 export * from './js/string.js';
 export * from './js/twitter.js';
 export * from './js/web.js';
+export * from './js/web3.js';
 export * from './js/storage.js';
 export * from './js/pendingRequest.js';
 export * from './js/object.js';
