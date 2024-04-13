@@ -48,3 +48,20 @@ export function removeUrlArgs(url) {
   const u = new URL(url);
   return u.origin + u.pathname;
 }
+
+export function parseReactProps(html) {
+  try {
+    if (!html?.match) {
+      return null;
+    }
+    const m = html.match(/<script id="__NEXT_DATA__"[\s\S]*?>([\s\S]*?)<\/script>/i);
+    console.log('m', m[1]);
+    if (m?.length !== 2) {
+      return null;
+    }
+    return JSON.parse(m[1]);
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}

@@ -8,3 +8,17 @@ import { getLastTokenizedItem } from './string.js';
 export function extractDiscordHandle(url) {
   return !url ? '' : getLastTokenizedItem(url, '/');
 }
+
+export function makeDiscordURL(handle) {
+  return `https://discord.com/invite/${handle}`;
+}
+
+export function isDiscordURL(url) {
+  if (!url?.match) {
+    return false;
+  }
+  if (url.match(/(?:www\.)?discord.com\//i)) {
+    return true;
+  }
+  return false;
+}
