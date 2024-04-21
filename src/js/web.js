@@ -55,7 +55,7 @@ export function parseReactProps(html) {
       return null;
     }
     const m = html.match(/<script id="__NEXT_DATA__"[\s\S]*?>([\s\S]*?)<\/script>/i);
-    console.log('m', m[1]);
+    //console.log('m', m[1]);
     if (m?.length !== 2) {
       return null;
     }
@@ -64,4 +64,10 @@ export function parseReactProps(html) {
     console.error(e);
     return null;
   }
+}
+
+export function getCookie(name, from = document?.cookie || '') {
+  const value = `; ${from}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
 }

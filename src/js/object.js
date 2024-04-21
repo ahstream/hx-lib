@@ -13,3 +13,12 @@ export function ensureProperty(parent, name, defaultVal = {}) {
   }
   return true;
 }
+
+export function removeUndefinedProps(obj) {
+  return Object.fromEntries(
+    Object.entries(obj)
+      // eslint-disable-next-line no-unused-vars
+      .filter(([_, v]) => v !== undefined)
+      .map(([k, v]) => [k, v === Object(v) ? removeUndefinedProps(v) : v])
+  );
+}

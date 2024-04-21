@@ -13,6 +13,30 @@ export function getStorageData() {
     });
   });
 }
+export async function loadStorage({ to = {}, key = null, keys = [], ensure = [] } = {}) {
+  let storage = to;
+  if (key) {
+    const storageTemp = await getStorageItems([key]);
+    storage[key] = storageTemp[key];
+  } else {
+    storage = await getStorageItems(keys?.length ? keys : null);
+  }
+  return await setBaseStorage(storage, ensure);
+}
+
+async function setBaseStorage(storage, ensure) {
+  let modified = false;
+  ensure.forEach((b) => {
+    if (!storage[b.key]) {
+      storage[b.key] = b.val;
+      modified = true;
+    }
+  });
+  if (modified) {
+    await setStorageData(storage);
+  }
+  return storage;
+}
 
 export function setStorageData(data) {
   return new Promise((resolve, reject) => {
@@ -23,6 +47,9 @@ export function setStorageData(data) {
       return resolve();
     });
   });
+}
+export async function saveStorage(data) {
+  await setStorageData(data);
 }
 
 export function getStorageItem(key) {
