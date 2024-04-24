@@ -138,3 +138,11 @@ export function stripEmojis(str, trim = true) {
     .replace(/\s+/g, ' ');
   return trim ? r.trim() : r;
 }
+
+export function parseJSONString(str, err = undefined) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return err;
+  }
+}
