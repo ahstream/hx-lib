@@ -14,11 +14,20 @@ export function ensureProperty(parent, name, defaultVal = {}) {
   return true;
 }
 
-export function removeUndefinedProps(obj) {
-  return Object.fromEntries(
-    Object.entries(obj)
-      // eslint-disable-next-line no-unused-vars
-      .filter(([_, v]) => v !== undefined)
-      .map(([k, v]) => [k, v === Object(v) ? removeUndefinedProps(v) : v])
-  );
+// A SO answer to https://stackoverflow.com/questions/286141/remove-blank-attributes-from-an-object-in-javascript
+// based off the recursive cleanEmpty function by @chickens.
+// This one can also handle Date objects correctly
+// and has a defaults list for values you want stripped.
+
+export function removeEmptyProps(obj, defaults = [undefined]) {
+  if (defaults.includes(obj)) return;
+
+  if (Array.isArray(obj))
+    return obj.map((v) => (v && typeof v === 'object' ? removeEmptyProps(v, defaults) : v)).filter((v) => !defaults.includes(v));
+
+  return Object.entries(obj).length
+    ? Object.entries(obj)
+        .map(([k, v]) => [k, v && typeof v === 'object' ? removeEmptyProps(v, defaults) : v])
+        .reduce((a, [k, v]) => (defaults.includes(v) ? a : { ...a, [k]: v }), {})
+    : obj;
 }
