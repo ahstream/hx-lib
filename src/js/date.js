@@ -123,29 +123,29 @@ export function addToDate(date, { days = 0, hours = 0, minutes = 0, seconds = 0,
 
 // BETWEEN DATES
 
-export function daysBetween(date1, date2) {
-  return betweenDates(date1, date2, ONE_DAY);
+export function daysBetween(date1, date2, strict = false) {
+  return betweenDates(date1, date2, ONE_DAY, strict);
 }
 
-export function hoursBetween(date1, date2) {
-  return betweenDates(date1, date2, ONE_HOUR);
+export function hoursBetween(date1, date2, strict = false) {
+  return betweenDates(date1, date2, ONE_HOUR, strict);
 }
 
-export function minutesBetween(date1, date2) {
-  return betweenDates(date1, date2, ONE_MINUTE);
+export function minutesBetween(date1, date2, strict = false) {
+  return betweenDates(date1, date2, ONE_MINUTE, strict);
 }
 
-export function secondsBetween(date1, date2) {
-  return betweenDates(date1, date2, ONE_SECOND);
+export function secondsBetween(date1, date2, strict = false) {
+  return betweenDates(date1, date2, ONE_SECOND, strict);
 }
 
-export function millisecondsBetween(date1, date2) {
-  return betweenDates(date1, date2, 1);
+export function millisecondsBetween(date1, date2, strict = false) {
+  return betweenDates(date1, date2, 1, strict);
 }
 
-function betweenDates(date1, date2, base) {
+function betweenDates(date1, date2, base, strict) {
   // base: hours * minutes * seconds * milliseconds
-  return Math.round(Math.abs((date1 - date2) / base));
+  return strict ? Math.round((date2 - date1) / base) : Math.round(Math.abs((date2 - date1) / base));
 }
 
 // TIMESTAMP
@@ -170,4 +170,35 @@ export function timestampToLocaleTimeString(val, errStr = 'null', locale = null,
 
 export function dateLogStr() {
   return new Date().toISOString();
+}
+
+export function createTimer() {
+  const now = Date.now();
+  const created = now;
+  let lastPing = now;
+  return {
+    ping: (msg = '') => {
+      const now = Date.now();
+      const diff = now - lastPing;
+      lastPing = now;
+      return {
+        ping: true,
+        msg,
+        ms: diff,
+        seconds: Math.floor(diff / 1000),
+        minutes: Math.floor(diff / 1000 / 60),
+      };
+    },
+    pong: (msg = '') => {
+      const now = Date.now();
+      const diff = now - created;
+      return {
+        pong: true,
+        msg,
+        ms: diff,
+        seconds: Math.floor(diff / 1000),
+        minutes: Math.floor(diff / 1000 / 60),
+      };
+    },
+  };
 }
