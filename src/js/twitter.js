@@ -39,8 +39,11 @@ export function extractTweetId(url) {
   return match?.groups?.id ? `${match.groups.id}` : '';
 }
 
-export function makeTwitterURL(handle) {
-  return `https://twitter.com/${handle}`;
+export function makeTwitterURL(handle, { x = false } = {}) {
+  if (!handle || typeof handle !== 'string') {
+    return '';
+  }
+  return x ? `https://x.com/${handle}` : `https://twitter.com/${handle}`;
 }
 
 export function convertTwitterSnowflakeToDate(snowflake) {
@@ -49,6 +52,9 @@ export function convertTwitterSnowflakeToDate(snowflake) {
 }
 
 export function makeTwitterFollowIntentUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return '';
+  }
   if (url.includes('/intent/follow') || url.includes('/intent/user')) {
     return url;
   }
@@ -60,6 +66,9 @@ export function makeTwitterFollowIntentUrl(url) {
 // https://twitter.com/yangbis76/status/1709019523683328231
 // https://twitter.com/intent/retweet?utm_source=alphabot.app&tweet_id=1710376441869672482
 export function makeTwitterRetweetIntentUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return '';
+  }
   if (url.includes('/intent/retweet')) {
     return url;
   }
@@ -70,6 +79,9 @@ export function makeTwitterRetweetIntentUrl(url) {
 // https://twitter.com/yangbis76/status/1709019523683328231
 // https://twitter.com/intent/retweet?utm_source=alphabot.app&tweet_id=1710376441869672482
 export function makeTwitterLikeIntentUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return '';
+  }
   if (url.includes('/intent/like')) {
     return url;
   }

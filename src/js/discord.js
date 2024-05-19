@@ -10,6 +10,9 @@ export function extractDiscordHandle(url) {
 }
 
 export function makeDiscordURL(handle) {
+  if (!handle || typeof handle !== 'string') {
+    return '';
+  }
   return `https://discord.com/invite/${handle}`;
 }
 
