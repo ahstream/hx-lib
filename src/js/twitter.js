@@ -6,54 +6,87 @@
 import { getSearchParam } from './web.js';
 import { onlyNumbers } from './string.js';
 
-export function extractTwitterHandle(url) {
-  if (!url) {
-    return '';
+export function extractTwitterHandle(url, err = '') {
+  if (!url || typeof url !== 'string') {
+    return err;
   }
-  if (typeof url !== 'string') {
-    console.error('invaid url:', url);
-    return '';
-  }
-
   const screenName = getSearchParam(url, 'screen_name');
   if (screenName) {
     return screenName;
   }
-
   const match = url.match(/^(?:https?:)?(?:\/\/)?(www\.)?(twitter|x).com\/@?(?<handle>\w+)/);
-  return match?.groups?.handle ? `${match.groups.handle}` : '';
+  return match?.groups?.handle ? `${match.groups.handle}` : err;
 }
 
-export function extractTweetId(url) {
+export function extractTweetId(url, err = '') {
   if (!url) {
-    return '';
+    return err;
   }
-
   const id = getSearchParam(url, 'tweet_id');
   if (id) {
     return id;
   }
-
   // https://twitter.com/yangbis76/status/1709019523683328231
   const match = url.match(/^(?:https?:)?(?:\/\/)?(www\.)?(twitter|x).com\/@?(?<handle>\w+)\/status\/@?(?<id>\w+)/);
-  return match?.groups?.id ? `${match.groups.id}` : '';
+  return match?.groups?.id ? `${match.groups.id}` : err;
+}
+
+export function isTwitterLink(url) {
+  return isTwitterPage(url);
+}
+
+export function isTwitterURL(url) {
+  return isTwitterPage(url);
+}
+
+export function isTwitterPage(url, err = false) {
+  if (!url || typeof url !== 'string') {
+    return err;
+  }
+  return !!url.match(/(https?:\/\/)?(www\.)?(twitter|x)\.com/gi);
+}
+
+export function isTwitterStartPage(url, err = false) {
+  if (!url || typeof url !== 'string') {
+    return err;
+  }
+  return !!url.match(/(https?:\/\/)?(www\.)?(twitter|x)\.com\/$/gi);
+}
+
+export function isTwitterStatusPage(url, err = false) {
+  if (!url || typeof url !== 'string') {
+    return err;
+  }
+  // eslint-disable-next-line no-useless-escape
+  return !!url.match(/[(?:https?:\/\/(?:twitter|x)\.com)](\/(?:#!\/)?(\w+)\/status(es)?\/(\d+))/i);
+}
+
+export function isTwitterProfilePage(url, err = false) {
+  if (!url || typeof url !== 'string') {
+    return err;
+  }
+  // eslint-disable-next-line no-useless-escape
+  return !!url.match(/(https:\/\/(?:twitter|x)\.com\/(?![a-zA-Z0-9_]+\/)([a-zA-Z0-9_]+))/i);
+}
+
+export function isTwitterUserPage(url) {
+  return isTwitterProfilePage(url);
 }
 
 export function makeTwitterURL(handle, { x = false } = {}) {
+  return makeTwitterProfileURL(handle, { x });
+}
+
+export function makeTwitterProfileURL(handle, { x = false } = {}) {
   if (!handle || typeof handle !== 'string') {
     return '';
   }
   return x ? `https://x.com/${handle}` : `https://twitter.com/${handle}`;
 }
 
-export function convertTwitterSnowflakeToDate(snowflake) {
-  const TWITTER_EPOCH = 1288834974657;
-  return new Date(Number(snowflake) / 4194304 + TWITTER_EPOCH);
-}
-
-export function makeTwitterFollowIntentUrl(url) {
+export function makeTwitterFollowIntentUrl(url, err = '') {
   if (!url || typeof url !== 'string') {
-    return '';
+    return err;
   }
   if (url.includes('/intent/follow') || url.includes('/intent/user')) {
     return url;
@@ -65,9 +98,9 @@ export function makeTwitterFollowIntentUrl(url) {
 
 // https://twitter.com/yangbis76/status/1709019523683328231
 // https://twitter.com/intent/retweet?utm_source=alphabot.app&tweet_id=1710376441869672482
-export function makeTwitterRetweetIntentUrl(url) {
+export function makeTwitterRetweetIntentUrl(url, err = '') {
   if (!url || typeof url !== 'string') {
-    return '';
+    return err;
   }
   if (url.includes('/intent/retweet')) {
     return url;
@@ -78,9 +111,9 @@ export function makeTwitterRetweetIntentUrl(url) {
 
 // https://twitter.com/yangbis76/status/1709019523683328231
 // https://twitter.com/intent/retweet?utm_source=alphabot.app&tweet_id=1710376441869672482
-export function makeTwitterLikeIntentUrl(url) {
+export function makeTwitterLikeIntentUrl(url, err = '') {
   if (!url || typeof url !== 'string') {
-    return '';
+    return err;
   }
   if (url.includes('/intent/like')) {
     return url;
@@ -89,29 +122,7 @@ export function makeTwitterLikeIntentUrl(url) {
   return `https://twitter.com/intent/like?tweet_id=${id}`;
 }
 
-// todo replace usages with isTwitterURL!
-export function isTwitterLink(url) {
-  if (!url?.match) {
-    return false;
-  }
-  if (url.match(/https:\/\/(?:www\.)?twitter.com\/(#!\/)?(\w*)/i)) {
-    return true;
-  }
-  if (url.match(/https:\/\/(?:www\.)?x.com\/(#!\/)?(\w*)/i)) {
-    return true;
-  }
-  return false;
-}
-
-export function isTwitterURL(url) {
-  if (!url?.match) {
-    return false;
-  }
-  if (url.match(/(?:www\.)?twitter.com\//i)) {
-    return true;
-  }
-  if (url.match(/(?:www\.)?x.com\//i)) {
-    return true;
-  }
-  return false;
+export function convertTwitterSnowflakeToDate(snowflake) {
+  const TWITTER_EPOCH = 1288834974657;
+  return new Date(Number(snowflake) / 4194304 + TWITTER_EPOCH);
 }

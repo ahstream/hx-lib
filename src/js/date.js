@@ -172,7 +172,7 @@ export function dateLogStr() {
   return new Date().toISOString();
 }
 
-export function createTimer() {
+export function createTimer({ log = true } = {}) {
   const now = Date.now();
   const created = now;
   let lastPing = now;
@@ -181,24 +181,32 @@ export function createTimer() {
       const now = Date.now();
       const diff = now - lastPing;
       lastPing = now;
-      return {
-        ping: true,
+      const result = {
+        hxtimer: 'ping',
         msg,
         ms: diff,
         seconds: Math.floor(diff / 1000),
         minutes: Math.floor(diff / 1000 / 60),
       };
+      if (log) {
+        console.log(result);
+      }
+      return result;
     },
     pong: (msg = '') => {
       const now = Date.now();
       const diff = now - created;
-      return {
-        pong: true,
+      const result = {
+        hxtimer: 'pong',
         msg,
         ms: diff,
         seconds: Math.floor(diff / 1000),
         minutes: Math.floor(diff / 1000 / 60),
       };
+      if (log) {
+        console.log(result);
+      }
+      return result;
     },
   };
 }

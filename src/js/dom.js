@@ -122,6 +122,20 @@ export async function waitForEitherSelector(selectors, maxWait = 30000, interval
   return null;
 }
 
+export async function waitForEitherTextContains(texts, selectors, maxWait = 30000, interval = 250, base = null) {
+  const stopTime = Date.now() + maxWait;
+  while (Date.now() <= stopTime) {
+    for (let i = 0; i < texts.length; i++) {
+      const result = await waitForTextContains(texts[i], selectors[i], interval, interval, base);
+      if (result) {
+        return result;
+      }
+    }
+    await sleep(interval);
+  }
+  return null;
+}
+
 export async function simulateClick(elem, deltaX = 5, deltaY = 5) {
   const plusOrMinusX = Math.random() < 0.5 ? -1 : 1;
   const plusOrMinusY = Math.random() < 0.5 ? -1 : 1;
