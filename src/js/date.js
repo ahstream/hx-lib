@@ -189,7 +189,7 @@ export function createTimer({ log = true } = {}) {
         minutes: Math.floor(diff / 1000 / 60),
       };
       if (log) {
-        console.log(result);
+        console.log('timer ping', result);
       }
       return result;
     },
@@ -204,7 +204,7 @@ export function createTimer({ log = true } = {}) {
         minutes: Math.floor(diff / 1000 / 60),
       };
       if (log) {
-        console.log(result);
+        console.log('timer pong', result);
       }
       return result;
     },

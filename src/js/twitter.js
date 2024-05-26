@@ -126,3 +126,26 @@ export function convertTwitterSnowflakeToDate(snowflake) {
   const TWITTER_EPOCH = 1288834974657;
   return new Date(Number(snowflake) / 4194304 + TWITTER_EPOCH);
 }
+
+export function convertToTwitterFollowers(text) {
+  // 4,970 Followers
+  // 36k Followers
+  // 70.3k Followers
+
+  if (typeof text !== 'string') {
+    return null;
+  }
+  let s = text.toLowerCase().replaceAll('followers', '').replaceAll(',', '').trim();
+  if (s.includes('k')) {
+    if (s.includes('.')) {
+      s = s.replace('.', '').replace('k', '00');
+    } else {
+      s = s.replace('k', '000');
+    }
+  }
+  try {
+    return Number(s);
+  } catch (e) {
+    return null;
+  }
+}

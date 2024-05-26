@@ -44,6 +44,13 @@ export function extractDiscordHandle(url, err = '') {
   //console.log('extractDiscordHandle; url, res', url, matches, matchesArr);
   return matchesArr?.length >= 6 ? matchesArr[matchesArr.length - 1] : err;
 }
+
+export function normalizeDiscordHandle(h) {
+  if (typeof h !== 'string' || !h) {
+    return h;
+  }
+  return h.replaceAll('invite', '').replaceAll('/', '');
+}
 /*
 export function extractDiscordHandle(url) {
   return !url ? '' : getLastTokenizedItem(url, '/');

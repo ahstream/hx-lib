@@ -9,6 +9,10 @@ export function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function randomNumber(min, max) {
+  return randomInt(min, max);
+}
+
 export function randomFloat() {
   return Math.random();
 }
