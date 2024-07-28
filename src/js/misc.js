@@ -3,9 +3,9 @@
  * FILE DESCRIPTION
  */
 
-export function kFormatter(num, suffix = 'k', lessThanK = '0') {
+export function kFormatter(num, suffix = 'k', lessThanK = '0', err = '') {
   if (typeof num !== 'number') {
-    return '';
+    return err;
   }
   if (num < 1000) {
     return lessThanK + suffix;

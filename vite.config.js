@@ -8,9 +8,9 @@ export default defineConfig({
     outDir: './dist',
     emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, 'src/main.js'),
-      name: 'main',
-      fileName: (format) => `main.${format}.js`,
+      entry: resolve(__dirname, 'src/index.js'),
+      name: 'index',
+      fileName: (format) => `index.${format}.js`,
       formats: ['cjs', 'es'],
     },
   },

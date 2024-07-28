@@ -11,6 +11,9 @@ export const ONE_WEEK = 7 * ONE_DAY;
 export const ONE_MONTH = 30 * ONE_DAY;
 export const ONE_YEAR = 365 * ONE_DAY;
 
+export function guiDate(date, locale = null) {
+  return new Date(date).toLocaleString(locale || 'SV-se');
+}
 export function isValidDate(date) {
   // An invalid date object returns NaN for getTime() and NaN is the only object not strictly equal to itself.
   date.getTime() === date.getTime();

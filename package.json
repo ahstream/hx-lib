@@ -1,25 +1,26 @@
 {
-  "name": "hx-lib",
-  "version": "1.0.0",
-  "description": "Hx client JavScript lib",
-  "author": "hstream",
-  "license": "UNLICENSED",
+  "name": "@ahstream/hx-lib",
+  "version": "1.0.6",
+  "description": "Hx common JavaScript helper functions",
+  "author": "ahstream",
+  "license": "ICS",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/main.es.js",
-  "module": "./dist/main.cjs.js",
+  "main": "./dist/index.es.js",
+  "module": "./dist/index.cjs.js",
   "exports": {
     ".": {
-      "import": "./dist/main.es.js",
-      "require": "./dist/main.cjs.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
     }
   },
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
     "preview": "vite preview",
+    "publish": "npm publish --access public",
     "null": ""
   },
   "devDependencies": {
