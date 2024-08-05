@@ -213,3 +213,25 @@ export function createTimer({ log = true } = {}) {
     },
   };
 }
+
+export function toTimestamp(v, err = undefined) {
+  if (!v) {
+    return err;
+  }
+  if (typeof v === 'number') {
+    return Number(v).toString().length !== 13 || !new Date(Number(v))?.getTime() ? err : Number(v);
+  }
+  if (typeof v !== 'string') {
+    return err;
+  }
+  // v is ensured to be a string from now!
+  if (Number.isFinite(+v)) {
+    return Number(v).toString().length === 13 && new Date(Number(v))?.getTime() ? Number(v) : err;
+  }
+
+  return new Date(v).getTime() || err;
+}
+
+export function isTimestamp(v) {
+  return typeof v === 'number' && toTimestamp(v, null) ? true : false;
+}
